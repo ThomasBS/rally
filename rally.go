@@ -20,6 +20,10 @@ func New(k string) *rally {
 	return &rally{key: k, api: api}
 }
 
+type Reference struct {
+	ReferenceUrl string `json:"_ref"`
+}
+
 type PersistableObject struct {
 	CreationDate string
 }
@@ -28,8 +32,14 @@ type DomainObject struct {
 	PersistableObject
 }
 
+type Workspace struct {
+	Name string
+}
+
 type WorkspaceDomainObject struct {
 	DomainObject
+
+	WorkspaceReference Reference `json:"Workspace"`
 }
 
 type Artifact struct {
@@ -48,6 +58,26 @@ type Requirement struct {
 
 type HierarchicalRequirement struct {
 	Requirement
+}
+
+func (r *rally) Fetch(object interface{}, ref Reference) {
+
+	name := fmt.Sprintf("%T", object)
+	splitted := strings.Split(name, ".")
+	kind := splitted[len(splitted)-1]
+
+	client := &http.Client{}
+	request, _ := http.NewRequest("GET", ref.ReferenceUrl, nil)
+	request.Header.Add(headerRequestKey, r.key)
+
+	response, _ := client.Do(request)
+	defer response.Body.Close()
+
+	body, _ := ioutil.ReadAll(response.Body)
+
+	var j map[string]*json.RawMessage
+	json.Unmarshal(body, &j)
+	json.Unmarshal(*j[kind], &object)
 }
 
 func (r *rally) Get(object interface{}, id string) {
