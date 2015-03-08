@@ -4,6 +4,10 @@
         "Name": "User Story Title",
         "Workspace": {
             "_ref": "hierarchicalrequirement/id/workspace"
+        },
+        "Tasks": {
+            "_ref": "hierarchicalrequirement/id/tasks",
+            "Count": 5
         }
     }
 }

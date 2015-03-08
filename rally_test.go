@@ -25,6 +25,8 @@ func TestGetHierarchicalRequirement(t *testing.T) {
 			file = "testdata/hierarchical-requirement.json"
 		case "/hierarchicalrequirement/id/workspace":
 			file = "testdata/workspace.json"
+		case "/hierarchicalrequirement/id/tasks":
+			file = "testdata/task-query.json"
 		}
 
 		assert.NotEmpty(t, file)
@@ -46,6 +48,7 @@ func TestGetHierarchicalRequirement(t *testing.T) {
 
 	assert.Equal(t, "User Story Title", hr.Name)
 	assert.Equal(t, "2015-01-01T12:00:00.000Z", hr.CreationDate)
+	assert.Equal(t, 5, hr.TasksQueryReference.Count)
 
 	hr.WorkspaceReference.ReferenceUrl = ts.URL + "/" + hr.WorkspaceReference.ReferenceUrl
 
@@ -53,4 +56,12 @@ func TestGetHierarchicalRequirement(t *testing.T) {
 	rally.Fetch(&w, hr.WorkspaceReference)
 
 	assert.Equal(t, "Workspace Title", w.Name)
+
+	hr.TasksQueryReference.ReferenceUrl = ts.URL + "/" + hr.TasksQueryReference.ReferenceUrl
+
+	var tl TaskQuery
+	rally.QueryFetch(&tl, hr.TasksQueryReference)
+	assert.Equal(t, 5, tl.TotalResultCount)
+	assert.Equal(t, "Task 1", tl.Results[0].Name)
+	assert.Equal(t, "Task 5", tl.Results[4].Name)
 }

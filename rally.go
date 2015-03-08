@@ -24,6 +24,17 @@ type Reference struct {
 	ReferenceUrl string `json:"_ref"`
 }
 
+type QueryReference struct {
+	ReferenceUrl string `json:"_ref"`
+	Count        int
+}
+
+type QueryResult struct {
+	TotalResultCount int
+	StartIndex       int
+	PageSize         int
+}
+
 type PersistableObject struct {
 	CreationDate string
 }
@@ -52,12 +63,25 @@ type SchedulableArtifact struct {
 	Artifact
 }
 
+type Task struct {
+	Artifact
+
+	Name string
+}
+
+type TaskQuery struct {
+	QueryResult
+	Results []Task
+}
+
 type Requirement struct {
 	SchedulableArtifact
 }
 
 type HierarchicalRequirement struct {
 	Requirement
+
+	TasksQueryReference QueryReference `json:"Tasks"`
 }
 
 func (r *rally) Fetch(object interface{}, ref Reference) {
@@ -78,6 +102,22 @@ func (r *rally) Fetch(object interface{}, ref Reference) {
 	var j map[string]*json.RawMessage
 	json.Unmarshal(body, &j)
 	json.Unmarshal(*j[kind], &object)
+}
+
+func (r *rally) QueryFetch(object interface{}, ref QueryReference) {
+
+	client := &http.Client{}
+	request, _ := http.NewRequest("GET", ref.ReferenceUrl, nil)
+	request.Header.Add(headerRequestKey, r.key)
+
+	response, _ := client.Do(request)
+	defer response.Body.Close()
+
+	body, _ := ioutil.ReadAll(response.Body)
+
+	var j map[string]*json.RawMessage
+	json.Unmarshal(body, &j)
+	json.Unmarshal(*j["QueryResult"], &object)
 }
 
 func (r *rally) Get(object interface{}, id string) {
