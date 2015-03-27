@@ -20,71 +20,7 @@ func New(k string) *rally {
 	return &rally{key: k, api: api}
 }
 
-type Reference struct {
-	ReferenceUrl string `json:"_ref"`
-}
-
-type QueryReference struct {
-	ReferenceUrl string `json:"_ref"`
-	Count        int
-}
-
-type QueryResult struct {
-	TotalResultCount int
-	StartIndex       int
-	PageSize         int
-}
-
-type PersistableObject struct {
-	CreationDate string
-}
-
-type DomainObject struct {
-	PersistableObject
-}
-
-type Workspace struct {
-	Name string
-}
-
-type WorkspaceDomainObject struct {
-	DomainObject
-
-	WorkspaceReference Reference `json:"Workspace"`
-}
-
-type Artifact struct {
-	WorkspaceDomainObject
-
-	Name string
-}
-
-type SchedulableArtifact struct {
-	Artifact
-}
-
-type Task struct {
-	Artifact
-
-	Name string
-}
-
-type TaskQuery struct {
-	QueryResult
-	Results []Task
-}
-
-type Requirement struct {
-	SchedulableArtifact
-}
-
-type HierarchicalRequirement struct {
-	Requirement
-
-	TasksQueryReference QueryReference `json:"Tasks"`
-}
-
-func (r *rally) Fetch(object interface{}, ref Reference) {
+func (r *rally) Fetch(object interface{}, ref reference) {
 
 	name := fmt.Sprintf("%T", object)
 	splitted := strings.Split(name, ".")
@@ -104,7 +40,7 @@ func (r *rally) Fetch(object interface{}, ref Reference) {
 	json.Unmarshal(*j[kind], &object)
 }
 
-func (r *rally) QueryFetch(object interface{}, ref QueryReference) {
+func (r *rally) QueryFetch(object interface{}, ref queryReference) {
 
 	client := &http.Client{}
 	request, _ := http.NewRequest("GET", ref.ReferenceUrl, nil)
