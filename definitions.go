@@ -27,7 +27,7 @@ type AllowedAttributeValue struct {
 type AllowedAttributeValueQuery struct {
 	queryResult
 
-	Result []AllowedAttributeValue
+	Results []AllowedAttributeValue
 }
 
 type AllowedQueryOperator struct {
@@ -39,7 +39,7 @@ type AllowedQueryOperator struct {
 type AllowedQueryOperatorQuery struct {
 	queryResult
 
-	Result []AllowedQueryOperator
+	Results []AllowedQueryOperator
 }
 
 type Artifact struct {
@@ -67,7 +67,7 @@ type Artifact struct {
 type ArtifactQuery struct {
 	queryResult
 
-	Result []Artifact
+	Results []Artifact
 }
 
 type Attachment struct {
@@ -87,7 +87,7 @@ type Attachment struct {
 type AttachmentQuery struct {
 	queryResult
 
-	Result []Attachment
+	Results []Attachment
 }
 
 type AttachmentContent struct {
@@ -127,7 +127,7 @@ type AttributeDefinition struct {
 type AttributeDefinitionQuery struct {
 	queryResult
 
-	Result []AttributeDefinition
+	Results []AttributeDefinition
 }
 
 type Blocker struct {
@@ -154,7 +154,7 @@ type Build struct {
 type BuildQuery struct {
 	queryResult
 
-	Result []Build
+	Results []Build
 }
 
 type BuildDefinition struct {
@@ -186,7 +186,7 @@ type Change struct {
 type ChangeQuery struct {
 	queryResult
 
-	Result []Change
+	Results []Change
 }
 
 type Changeset struct {
@@ -208,7 +208,7 @@ type Changeset struct {
 type ChangesetQuery struct {
 	queryResult
 
-	Result []Changeset
+	Results []Changeset
 }
 
 type ConversationPost struct {
@@ -224,7 +224,7 @@ type ConversationPost struct {
 type ConversationPostQuery struct {
 	queryResult
 
-	Result []ConversationPost
+	Results []ConversationPost
 }
 
 type Defect struct {
@@ -277,7 +277,7 @@ type Defect struct {
 type DefectQuery struct {
 	queryResult
 
-	Result []Defect
+	Results []Defect
 }
 
 type DefectSuite struct {
@@ -309,7 +309,7 @@ type DefectSuite struct {
 type DefectSuiteQuery struct {
 	queryResult
 
-	Result []DefectSuite
+	Results []DefectSuite
 }
 
 type DomainObject struct {
@@ -352,7 +352,7 @@ type HierarchicalRequirement struct {
 type HierarchicalRequirementQuery struct {
 	queryResult
 
-	Result []HierarchicalRequirement
+	Results []HierarchicalRequirement
 }
 
 type Iteration struct {
@@ -394,7 +394,7 @@ type Milestone struct {
 type MilestoneQuery struct {
 	queryResult
 
-	Result []Milestone
+	Results []Milestone
 }
 
 type PersistableObject struct {
@@ -425,7 +425,7 @@ type Project struct {
 type ProjectQuery struct {
 	queryResult
 
-	Result []Project
+	Results []Project
 }
 
 type Release struct {
@@ -471,7 +471,7 @@ type Revision struct {
 type RevisionQuery struct {
 	queryResult
 
-	Result []Revision
+	Results []Revision
 }
 
 type RevisionHistory struct {
@@ -541,7 +541,7 @@ type Tag struct {
 type TagQuery struct {
 	queryResult
 
-	Result []Tag
+	Results []Tag
 }
 
 type Task struct {
@@ -601,7 +601,7 @@ type TestCase struct {
 type TestCaseQuery struct {
 	queryResult
 
-	Result []TestCase
+	Results []TestCase
 }
 
 type TestCaseResult struct {
@@ -621,7 +621,7 @@ type TestCaseResult struct {
 type TestCaseResultQuery struct {
 	queryResult
 
-	Result []TestCaseResult
+	Results []TestCaseResult
 }
 
 type TestCaseStep struct {
@@ -637,7 +637,7 @@ type TestCaseStep struct {
 type TestCaseStepQuery struct {
 	queryResult
 
-	Result []TestCaseStep
+	Results []TestCaseStep
 }
 
 type TypeDefinition struct {
@@ -665,7 +665,7 @@ type TypeDefinition struct {
 type TypeDefinitionQuery struct {
 	queryResult
 
-	Result []TypeDefinition
+	Results []TypeDefinition
 }
 
 type User struct {
@@ -731,7 +731,7 @@ type UserPermission struct {
 type UserPermissionQuery struct {
 	queryResult
 
-	Result []UserPermission
+	Results []UserPermission
 }
 
 type UserProfile struct {
