@@ -18,9 +18,10 @@ type queryResult struct {
 type AllowedAttributeValue struct {
 	PersistableObject
 
-	AttributeDefinitionReference reference `json:"AttributeDefinition"`
-	StringValue                  string
-	ValueIndex                   int
+	AttributeDefinitionReference reference `json:"AttributeDefinition"` // AttributeDefinition
+
+	StringValue string
+	ValueIndex  int
 }
 
 type AllowedAttributeValueQuery struct {
@@ -44,25 +45,23 @@ type AllowedQueryOperatorQuery struct {
 type Artifact struct {
 	WorkspaceDomainObject
 
-	ChangesetsQueryReference queryReference `json:"Changesets"`
-	Description              string
+	ChangesetsQueryReference queryReference `json:"Changesets"`      // ChangesetQuery
+	DiscussionQueryReference queryReference `json:"Discussion"`      // ConversationPostQuery
+	MilestonesQueryReference queryReference `json:"Milestones"`      // MilestoneQuery
+	OwnerReference           reference      `json:"Owner"`           // Owner
+	ProjectReference         reference      `json:"Project"`         // Project
+	RevisionHistoryReference reference      `json:"RevisionHistory"` // RevisionHistory
+	TagsQueryReference       queryReference `json:"Tags"`            // TagQuery
 
-	// ConversationPost
-	DiscussionQueryReference queryReference `json:"Discussion"`
-
+	Description                  string
 	DisplayColor                 string
 	Expedite                     bool
 	FormattedId                  string `json:"FormattedID"`
 	LastUpdateDate               string
 	LatestDiscussionAgeInMinutes int
-	MilestonesQueryReference     queryReference `json:"Milestones"`
 	Name                         string
 	Notes                        string
-	OwnerReference               reference `json:"Owner"`
-	ProjectReference             reference `json:"Project"`
 	Ready                        bool
-	RevisionHistoryReference     reference      `json:"RevisionHistory"`
-	TagsQueryReference           queryReference `json:"Tags"`
 }
 
 type ArtifactQuery struct {
@@ -74,17 +73,15 @@ type ArtifactQuery struct {
 type Attachment struct {
 	WorkspaceDomainObject
 
-	ArtifactReference reference `json:"Artifact"`
+	ArtifactReference       reference `json:"Artifact"`       // Artifact
+	ContentReference        reference `json:"Content"`        // AttachmentContent
+	TestCaseResultReference reference `json:"TestCaseResult"` // TestCaseResult
+	UserReference           reference `json:"User"`           // User
 
-	// AttachmentContent
-	ContentReference reference `json:"Content"`
-
-	ContentType             string
-	Description             string
-	Name                    string
-	Size                    int
-	TestCaseResultReference reference `json:"TestCaseResult"`
-	UserReference           reference `json:"User"`
+	ContentType string
+	Description string
+	Name        string
+	Size        int
 }
 
 type AttachmentQuery struct {
@@ -102,14 +99,10 @@ type AttachmentContent struct {
 type AttributeDefinition struct {
 	WorkspaceDomainObject
 
-	// AllowedQueryOperatorQuery
-	AllowedQueryOperatorsQueryReference queryReference `json:"AllowedQueryOperators"`
-
-	// AllowedAttributeValueQuery
-	AllowedValuesQueryReference queryReference `json:"AllowedValues"`
-
-	// TypeDefinition
-	AllowedValueTypeReference reference `json:"AllowedValueType"`
+	AllowedQueryOperatorsQueryReference queryReference `json:"AllowedQueryOperators"` // AllowedQueryOperatorQuery
+	AllowedValuesQueryReference         queryReference `json:"AllowedValues"`         // AllowedAttributeValueQuery
+	AllowedValueTypeReference           reference      `json:"AllowedValueType"`      // TypeDefinition
+	TypeDefinitionReference             reference      `json:"TypeDefinition"`        // TypeDefinition
 
 	AttributeType       string
 	Constrained         bool
@@ -128,10 +121,6 @@ type AttributeDefinition struct {
 	Sortable            bool
 	SystemRequired      bool
 	Type                string
-
-	// TypeDefinition
-	TypeDefinitionReference reference `json:"TypeDefinition"`
-
 	VisibleOnlyToAdmins bool
 }
 
@@ -144,24 +133,22 @@ type AttributeDefinitionQuery struct {
 type Blocker struct {
 	DomainObject
 
-	// User
-	BlockedByReference reference `json:"BlockedBy"`
-
-	// Artifact
-	WorkProductReference reference `json:"WorkProduct"`
+	BlockedByReference   reference `json:"BlockedBy"`   // User
+	WorkProductReference reference `json:"WorkProduct"` // Artifact
 }
 
 type Build struct {
 	WorkspaceDomainObject
 
-	BuildDefinitionReference reference      `json:"BuildDefinition"`
-	ChangesetsQueryReference queryReference `json:"Changesets"`
-	Duration                 float64
-	Message                  string
-	Number                   string
-	Start                    string
-	Status                   string
-	Uri                      string
+	BuildDefinitionReference reference      `json:"BuildDefinition"` // BuildDefinition
+	ChangesetsQueryReference queryReference `json:"Changesets"`      // Changeset
+
+	Duration float64
+	Message  string
+	Number   string
+	Start    string
+	Status   string
+	Uri      string
 }
 
 type BuildQuery struct {
@@ -173,28 +160,27 @@ type BuildQuery struct {
 type BuildDefinition struct {
 	WorkspaceDomainObject
 
-	BuildsQueryReference queryReference `json:"Builds"`
-	Description          string
+	BuildsQueryReference   queryReference `json:"Builds"`    // BuildQuery
+	LastBuildReference     reference      `json:"LastBuild"` // Build
+	ProjectReference       reference      `json:"Project"`   // Project
+	ProjectsQueryReference reference      `json:"Projects"`  // ProjectQuery
 
-	// Build
-	LastBuildReference reference `json:"LastBuild"`
-
-	LastStatus             string
-	Name                   string
-	ProjectReference       reference `json:"Project"`
-	ProjectsQueryReference reference `json:"Projects"`
-	Uri                    string
+	Description string
+	LastStatus  string
+	Name        string
+	Uri         string
 }
 
 type Change struct {
 	WorkspaceDomainObject
 
-	Action             string
-	Base               string
-	ChangesetReference reference `json:"Changeset"`
-	Extension          string
-	PathAndFilename    string
-	Uri                string
+	ChangesetReference reference `json:"Changeset"` // Changeset
+
+	Action          string
+	Base            string
+	Extension       string
+	PathAndFilename string
+	Uri             string
 }
 
 type ChangeQuery struct {
@@ -206,19 +192,17 @@ type ChangeQuery struct {
 type Changeset struct {
 	WorkspaceDomainObject
 
-	ArtifactsQueryReference queryReference `json:"Artifacts"`
+	ArtifactsQueryReference queryReference `json:"Artifacts"`     // ArtifactQuery
+	AuthorReference         reference      `json:"Author"`        // User
+	BuildsQueryReference    queryReference `json:"Builds"`        // BuildQuery
+	ChangesQueryReference   queryReference `json:"Changes"`       // ChangeQuery
+	SCMRepositoryReference  reference      `json:"SCMRepository"` // SCMRepository
 
-	// User
-	AuthorReference reference `json:"Author"`
-
-	BuildsQueryReference   queryReference `json:"Builds"`
-	ChangesQueryReference  queryReference `json:"Changes"`
-	CommitTimestamp        string
-	Message                string
-	Name                   string
-	Revision               string
-	SCMRepositoryReference reference `json:"SCMRepository"`
-	Uri                    string
+	CommitTimestamp string
+	Message         string
+	Name            string
+	Revision        string
+	Uri             string
 }
 
 type ChangesetQuery struct {
@@ -230,10 +214,11 @@ type ChangesetQuery struct {
 type ConversationPost struct {
 	WorkspaceDomainObject
 
-	ArtifactReference reference `json:"Artifact"`
-	PostNumber        int
-	Text              string
-	UserReference     reference `json:"User"`
+	ArtifactReference reference `json:"Artifact"` // Artifact
+	UserReference     reference `json:"User"`     // User
+
+	PostNumber int
+	Text       string
 }
 
 type ConversationPostQuery struct {
@@ -245,53 +230,48 @@ type ConversationPostQuery struct {
 type Defect struct {
 	SchedulableArtifact
 
-	AcceptedDate              string
-	AffectsDoc                bool
-	AttachmentsQueryReference queryReference `json:"Attachments"`
-	Blocked                   bool
-	BlockedReason             string
-	BlockerReference          reference `json:"Blocker"`
-	ClosedDate                string
-	DefectSuiteQueryReference queryReference `json:"DefectSuites"`
-	DragAndDropRank           string
+	AttachmentsQueryReference queryReference `json:"Attachments"`    // AttachmentQuery
+	BlockerReference          reference      `json:"Blocker"`        // Blocker
+	DefectSuiteQueryReference queryReference `json:"DefectSuites"`   // DefectSuiteQuery
+	DuplicatesQueryReference  queryReference `json:"Duplicates"`     // DefectQuery
+	IterationReference        reference      `json:"Iteration"`      // Iteration
+	ReleaseReference          reference      `json:"Release"`        // Release
+	RequirementReference      reference      `json:"Requirement"`    // Requirement
+	SubmittedByReference      reference      `json:"SubmittedBy"`    // User
+	TasksQueryReference       queryReference `json:"Tasks"`          // TaskQuery
+	TestCaseReference         reference      `json:"TestCase"`       // TestCase
+	TestCaseResultReference   reference      `json:"TestCaseResult"` // TestCaseResult
+	TestCasesQueryReference   queryReference `json:"TestCases"`      // TestCaseQuery
 
-	// Defect
-	DuplicatesQueryReference queryReference `json:"Duplicates"`
-
+	AcceptedDate         string
+	AffectsDoc           bool
+	Blocked              bool
+	BlockedReason        string
+	ClosedDate           string
+	DragAndDropRank      string
 	Environment          string
 	FixedInBuild         string
 	FoundInBuild         string
 	InProgressDate       string
-	IterationReference   reference `json:"Iteration"`
 	OpenedDate           string
 	Package              string
 	PlanEstimate         float64
 	Priority             string
 	Recycled             bool
-	ReleaseReference     reference `json:"Release"`
 	ReleaseNote          bool
-	RequirementReference reference `json:"Requirement"`
 	Resolution           string
 	SalesforceCaseId     string `json:"SalesforceCaseID"`
 	SalesforceCaseNumber string
 	Severity             string
 	State                string
-
-	// User
-	SubmittedByReference reference `json:"SubmittedBy"`
-
-	TargetBuild             string
-	TargetDate              string
-	TaskActualTotal         float64
-	TaskEstimateTotal       float64
-	TaskRemainingTotal      float64
-	TasksQueryReference     queryReference `json:"Tasks"`
-	TaskStatus              string
-	TestCaseReference       reference      `json:"TestCase"`
-	TestCaseResultReference reference      `json:"TestCaseResult"`
-	TestCasesQueryReference queryReference `json:"TestCases"`
-	TestCaseStatus          string
-	VerifiedInBuild         string
+	TargetBuild          string
+	TargetDate           string
+	TaskActualTotal      float64
+	TaskEstimateTotal    float64
+	TaskRemainingTotal   float64
+	TaskStatus           string
+	TestCaseStatus       string
+	VerifiedInBuild      string
 }
 
 type DefectQuery struct {
@@ -303,26 +283,27 @@ type DefectQuery struct {
 type DefectSuite struct {
 	SchedulableArtifact
 
-	AcceptedDate              string
-	AttachmentsQueryReference queryReference `json:"Attachments"`
-	Blocked                   bool
-	BlockedReason             string
-	BlockerReference          reference `json:"Blocker"`
-	ClosedDefectCount         int
-	DefectsQueryReference     reference `json:"Defects"`
-	DefectStatus              string
-	DragAndDropRank           string
-	InProgressDate            string
-	IterationReference        reference `json:"Iteration"`
-	Package                   string
-	PlanEstimate              float64
-	ReleaseReference          reference `json:"Release"`
-	TaskActualTotal           float64
-	TaskEstimateTotal         float64
-	TaskRemainingTotal        float64
-	TasksQueryReference       queryReference `json:"Tasks"`
-	TaskStatus                string
-	TotalDefectCount          int
+	AttachmentsQueryReference queryReference `json:"Attachments"` // AttachmentQuery
+	BlockerReference          reference      `json:"Blocker"`     // Blocker
+	DefectsQueryReference     reference      `json:"Defects"`     // DefectQuery
+	IterationReference        reference      `json:"Iteration"`   // Iteration
+	ReleaseReference          reference      `json:"Release"`     // Release
+	TasksQueryReference       queryReference `json:"Tasks"`       // TaskQuery
+
+	AcceptedDate       string
+	Blocked            bool
+	BlockedReason      string
+	ClosedDefectCount  int
+	DefectStatus       string
+	DragAndDropRank    string
+	InProgressDate     string
+	Package            string
+	PlanEstimate       float64
+	TaskActualTotal    float64
+	TaskEstimateTotal  float64
+	TaskRemainingTotal float64
+	TaskStatus         string
+	TotalDefectCount   int
 }
 
 type DefectSuiteQuery struct {
@@ -334,50 +315,38 @@ type DefectSuiteQuery struct {
 type DomainObject struct {
 	PersistableObject
 
-	SubscriptionReference reference `json:"Subscription"`
+	SubscriptionReference reference `json:"Subscription"` // Subscription
 }
 
-// https://rally1.rallydev.com/slm/doc/webservice/objectModel.sp#HierarchicalRequirement
 type HierarchicalRequirement struct {
 	Requirement
 
-	AcceptedDate     string
-	Blocked          bool
-	BlockedReason    string
-	BlockerReference reference `json:"Blocker"`
+	BlockerReference           reference      `json:"Blocker"`      // Blocker
+	ChildrenQueryReference     queryReference `json:"Children"`     // HierarchicalRequirementQuery
+	DefectsQueryReference      queryReference `json:"Defects"`      // DefectQuery
+	IterationReference         reference      `json:"Iteration"`    // Iteration
+	ParentReference            reference      `json:"Parent"`       // HierarchicalRequirement
+	PredecessorsQueryReference queryReference `json:"Predecessors"` // HierarchicalRequirementQuery
+	ReleaseReference           reference      `json:"Release"`      // Release
+	SuccessorsQueryReference   queryReference `json:"Successors"`   // HierarchicalRequirementQuery
+	TasksQueryReference        queryReference `json:"Tasks"`        // TaskQuery
+	TestCasesQueryReference    queryReference `json:"TestCases"`    // TestCaseQuery
 
-	// HierarchicalRequirement
-	ChildrenQueryReference queryReference `json:"Children"`
-
-	DefectsQueryReference queryReference `json:"Defects"`
-	DefectStatus          string
-	DirectChildrenCount   int
-	DragAndDropRank       string
-	HasParent             bool
-	InProgressDate        string
-	IterationReference    reference `json:"Iteration"`
-
-	// HierarchicalRequirement
-	ParentReference reference `json:"Parent"`
-
-	PlanEstimate float64
-
-	// HierarchicalRequirement
-	PredecessorsQueryReference queryReference `json:"Predecessors"`
-
-	Recycled         bool
-	ReleaseReference reference `json:"Release"`
-
-	// HierarchicalRequirement
-	SuccessorsQueryReference queryReference `json:"Successors"`
-
-	TaskActualTotal         float64
-	TaskEstimateTotal       float64
-	TaskRemainingTotal      float64
-	TasksQueryReference     queryReference `json:"Tasks"`
-	TaskStatus              string
-	TestCasesQueryReference queryReference `json:"TestCases"`
-	TestCaseStatus          string
+	AcceptedDate        string
+	Blocked             bool
+	BlockedReason       string
+	DefectStatus        string
+	DirectChildrenCount int
+	DragAndDropRank     string
+	HasParent           bool
+	InProgressDate      string
+	PlanEstimate        float64
+	Recycled            bool
+	TaskActualTotal     float64
+	TaskEstimateTotal   float64
+	TaskRemainingTotal  float64
+	TaskStatus          string
+	TestCaseStatus      string
 }
 
 type HierarchicalRequirementQuery struct {
@@ -389,42 +358,36 @@ type HierarchicalRequirementQuery struct {
 type Iteration struct {
 	WorkspaceDomainObject
 
-	EndDate                               string
-	Name                                  string
-	Notes                                 string
-	PlanEstimate                          float64
-	PlannedVelocity                       float64
-	ProjectReference                      reference `json:"Project"`
-	RevisionHistoryReference              reference `json:"RevisionHistory"`
-	StartDate                             string
-	State                                 string
-	TaskActualTotal                       float64
-	TaskEstimateTotal                     float64
-	TaskRemainingTotal                    float64
-	Theme                                 string
-	UserIterationCapacitiesQueryReference queryReference `json:"UserIterationCapacities"`
+	ProjectReference                      reference      `json:"Project"`                 // Project
+	RevisionHistoryReference              reference      `json:"RevisionHistory"`         // RevisionHistory
+	UserIterationCapacitiesQueryReference queryReference `json:"UserIterationCapacities"` // UserIterationCapacityQuery
+
+	EndDate            string
+	Name               string
+	Notes              string
+	PlanEstimate       float64
+	PlannedVelocity    float64
+	StartDate          string
+	State              string
+	TaskActualTotal    float64
+	TaskEstimateTotal  float64
+	TaskRemainingTotal float64
+	Theme              string
 }
 
 type Milestone struct {
 	WorkspaceDomainObject
 
-	// Artifact
-	ArtifactsQueryReference queryReference `json:"Artifacts"`
+	ArtifactsQueryReference  queryReference `json:"Artifacts"`       // ArtifactQuery
+	ProjectsQueryReference   queryReference `json:"Projects"`        // ProjectQuery
+	RevisionHistoryReference reference      `json:"RevisionHistory"` // RevisionHistory
+	TargetProjectReference   reference      `json:"TargetProject"`   // Project
 
-	DisplayColor string
-	FormattedId  string `json:"FormattedID"`
-	Name         string
-	Notes        string
-
-	// ProjectQuery
-	ProjectsQueryReference queryReference `json:"Projects"`
-
-	RevisionHistoryReference reference `json:"RevisionHistory"`
-	TargetDate               string
-
-	// Project
-	TargetProjectReference reference `json:"TargetProject"`
-
+	DisplayColor       string
+	FormattedId        string `json:"FormattedID"`
+	Name               string
+	Notes              string
+	TargetDate         string
 	TotalArtifactCount int
 }
 
@@ -443,36 +406,20 @@ type PersistableObject struct {
 type Project struct {
 	WorkspaceDomainObject
 
-	BuildDefinitionsQueryReference queryReference `json:"BuildDefinitions"`
+	BuildDefinitionsQueryReference queryReference `json:"BuildDefinitions"` // BuildDefinitionQuery
+	ChildrenQueryReference         queryReference `json:"Children"`         // ProjectQuery
+	EditorsQueryReference          queryReference `json:"Editors"`          // UserQuery
+	IterationsQueryReference       queryReference `json:"Iterations"`       // IterationQuery
+	OwnerReference                 reference      `json:"Owner"`            // User
+	ParentReference                reference      `json:"Parent"`           // Project
+	ReleasesQueryReference         queryReference `json:"Releases"`         // ReleaseQuery
+	TeamMembersQueryReference      queryReference `json:"TeamMembers"`      // UserQuery
 
-	// ProjectQuery
-	ChildrenQueryReference queryReference `json:"Children"`
-
-	Description string
-
-	// UserQuery
-	EditorsQueryReference queryReference `json:"Editors"`
-
-	// IterationQuery
-	IterationsQueryReference queryReference `json:"Iterations"`
-
-	Name  string
-	Notes string
-
-	// User
-	OwnerReference reference `json:"Owner"`
-
-	// Project
-	ParentReference reference `json:"Parent"`
-
-	// ReleaseQuery
-	ReleasesQueryReference queryReference `json:"Releases"`
-
+	Description   string
+	Name          string
+	Notes         string
 	SchemaVersion string
 	State         string
-
-	// UserQuery
-	TeamMembersQueryReference queryReference `json:"TeamMembers"`
 }
 
 type ProjectQuery struct {
@@ -484,16 +431,17 @@ type ProjectQuery struct {
 type Release struct {
 	WorkspaceDomainObject
 
+	ProjectReference         reference `json:"Project"`         // Project
+	RevisionHistoryReference reference `json:"RevisionHistory"` // RevisionHistory
+
 	Accepted                     float64
 	GrossEstimateConversionRatio float64
 	Name                         string
 	Notes                        string
 	PlanEstimate                 float64
 	PlannedVelocity              float64
-	ProjectReference             reference `json:"Project"`
 	ReleaseDate                  string
 	ReleaseStartDate             string
-	RevisionHistoryReference     reference `json:"RevisionHistory"`
 	State                        string
 	TaskActualTotal              float64
 	TaskEstimateTotal            float64
@@ -505,8 +453,7 @@ type Release struct {
 type Requirement struct {
 	SchedulableArtifact
 
-	// AttachmentQuery
-	AttachmentsQueryReference queryReference `json:"Attachments"`
+	AttachmentsQueryReference queryReference `json:"Attachments"` // AttachmentQuery
 
 	Package string
 }
@@ -514,10 +461,11 @@ type Requirement struct {
 type Revision struct {
 	WorkspaceDomainObject
 
-	Description              string
-	RevisionHistoryReference reference `json:"RevisionHistory"`
-	RevisionNumber           int
-	UserReference            reference `json:"User"`
+	RevisionHistoryReference reference `json:"RevisionHistory"` // RevisionHistory
+	UserReference            reference `json:"User"`            // User
+
+	Description    string
+	RevisionNumber int
 }
 
 type RevisionQuery struct {
@@ -529,57 +477,58 @@ type RevisionQuery struct {
 type RevisionHistory struct {
 	WorkspaceDomainObject
 
-	RevisionsQueryReference queryReference `json:"Revisions"`
+	RevisionsQueryReference queryReference `json:"Revisions"` // RevisionQuery
 }
 
 type SCMRepository struct {
 	WorkspaceDomainObject
 
-	Description            string
-	Name                   string
-	ProjectsQueryReference queryReference `json:"Projects"`
-	SCMType                string
-	Uri                    string
+	ProjectsQueryReference queryReference `json:"Projects"` // ProjectQuery
+
+	Description string
+	Name        string
+	SCMType     string
+	Uri         string
 }
 
 type SchedulableArtifact struct {
 	Artifact
 
-	AcceptedDate        string
-	Blocked             bool
-	BlockedReason       string
-	BlockerReference    reference `json:"Blocker"`
-	DragAndDropRank     string
-	IterationReference  reference `json:"Iteration"`
-	PlanEstimate        float64
-	ReleaseReference    reference `json:"Release"`
-	ScheduleState       string
-	TaskActualTotal     float64
-	TaskEstimateTotal   float64
-	TaskRemainingTotal  float64
-	TasksQueryReference queryReference `json:"Tasks"`
+	BlockerReference    reference      `json:"Blocker"`   // Blocker
+	IterationReference  reference      `json:"Iteration"` // Iteration
+	ReleaseReference    reference      `json:"Release"`   // Release
+	TasksQueryReference queryReference `json:"Tasks"`     // TaskQuery
+
+	AcceptedDate       string
+	Blocked            bool
+	BlockedReason      string
+	DragAndDropRank    string
+	PlanEstimate       float64
+	ScheduleState      string
+	TaskActualTotal    float64
+	TaskEstimateTotal  float64
+	TaskRemainingTotal float64
 }
 
 type Subscription struct {
 	PersistableObject
 
-	ExpirationDate           string
-	MaximumCustomUserFields  int
-	MaximumProjects          int
-	Modules                  string
-	Name                     string
-	PasswordExpirationDays   int
-	PreviousPasswordCount    int
-	ProjectHierarchyEnabled  bool
-	RevisionHistoryReference reference `json:"RevisionHistory"`
-	SessionTimeoutSeconds    int
-	StoryHierarchyEnabled    bool
-	StoryHierarchyType       string
-	SubscriptionId           int `json:"SubscriptionID"`
-	SubscriptionType         string
+	RevisionHistoryReference reference      `json:"RevisionHistory"` // RevisionHistory
+	WorkspacesQueryReference queryReference `json:"Workspaces"`      // WorkspaceQuery
 
-	// Workspace
-	WorkspacesQueryReference queryReference `json:"Workspaces"`
+	ExpirationDate          string
+	MaximumCustomUserFields int
+	MaximumProjects         int
+	Modules                 string
+	Name                    string
+	PasswordExpirationDays  int
+	PreviousPasswordCount   int
+	ProjectHierarchyEnabled bool
+	SessionTimeoutSeconds   int
+	StoryHierarchyEnabled   bool
+	StoryHierarchyType      string
+	SubscriptionId          int `json:"SubscriptionID"`
+	SubscriptionType        string
 }
 
 type Tag struct {
@@ -598,23 +547,22 @@ type TagQuery struct {
 type Task struct {
 	Artifact
 
-	Actuals                   float64
-	AttachmentsQueryReference queryReference `json:"Attachments"`
-	Blocked                   bool
-	BlockedReason             string
-	DragAndDropRank           string
-	Estimate                  float64
-	IterationReference        reference `json:"Iteration"`
-	ProjectReference          reference `json:"Project"`
-	Recycled                  bool
-	ReleaseReference          reference `json:"Release"`
-	State                     string
-	TaskIndex                 int
-	TimeSpent                 float64
-	ToDo                      float64
+	AttachmentsQueryReference queryReference `json:"Attachments"` // AttachmentQuery
+	IterationReference        reference      `json:"Iteration"`   // Iteration
+	ProjectReference          reference      `json:"Project"`     // Project
+	ReleaseReference          reference      `json:"Release"`     // Release
+	WorkProductReference      reference      `json:"WorkProduct"` // SchedulableArtifact
 
-	// SchedulableArtifact
-	WorkProductReference reference `json:"WorkProduct"`
+	Actuals         float64
+	Blocked         bool
+	BlockedReason   string
+	DragAndDropRank string
+	Estimate        float64
+	Recycled        bool
+	State           string
+	TaskIndex       int
+	TimeSpent       float64
+	ToDo            float64
 }
 
 type TaskQuery struct {
@@ -626,35 +574,28 @@ type TaskQuery struct {
 type TestCase struct {
 	Artifact
 
-	AttachmentsQueryReference queryReference `json:"Attachments"`
-	DefectsQueryReference     queryReference `json:"Defects"`
-	DefectStatus              string
-	DragAndDropRank           string
-	LastBuild                 string
-	LastRun                   string
-	LastVerdict               string
-	Method                    string
-	Objective                 string
-	Package                   string
-	PostConditions            string
-	PreConditions             string
-	Priority                  string
-	Recycled                  bool
+	AttachmentsQueryReference queryReference `json:"Attachments"` // AttachmentQuery
+	DefectsQueryReference     queryReference `json:"Defects"`     // DefectQuery
+	ResultsQueryReference     queryReference `json:"Results"`     // TestCaseResultQuery
+	StepsQueryReference       queryReference `json:"Steps"`       // TestCaseStepQuery
+	WorkProductReference      reference      `json:"WorkProduct"` // Artifact
 
-	// TestCaseResultQuery
-	ResultsQueryReference queryReference `json:"Results"`
-
-	Risk string
-
-	// TestCaseStepQuery
-	StepsQueryReference queryReference `json:"Steps"`
-
+	DefectStatus             string
+	DragAndDropRank          string
+	LastBuild                string
+	LastRun                  string
+	LastVerdict              string
+	Method                   string
+	Objective                string
+	Package                  string
+	PostConditions           string
+	PreConditions            string
+	Priority                 string
+	Recycled                 bool
+	Risk                     string
 	Type                     string
 	ValidationExpectedResult string
 	ValidationInput          string
-
-	// Artifact
-	WorkProductReference reference `json:"WorkProduct"`
 }
 
 type TestCaseQuery struct {
@@ -666,17 +607,15 @@ type TestCaseQuery struct {
 type TestCaseResult struct {
 	WorkspaceDomainObject
 
-	AttachmentsQueryReference queryReference `json:"Attachments"`
-	Build                     string
-	Date                      string
-	Duration                  float64
-	Notes                     string
-	TestCaseReference         reference `json:"TestCase"`
+	AttachmentsQueryReference queryReference `json:"Attachments"` // AttachmentQuery
+	TestCaseReference         reference      `json:"TestCase"`    // TestCase
+	TesterReference           reference      `json:"Tester"`      // User
 
-	// User
-	TesterReference reference `json:"Tester"`
-
-	Verdict string
+	Build    string
+	Date     string
+	Duration float64
+	Notes    string
+	Verdict  string
 }
 
 type TestCaseResultQuery struct {
@@ -688,10 +627,11 @@ type TestCaseResultQuery struct {
 type TestCaseStep struct {
 	WorkspaceDomainObject
 
-	ExpectedResult    string
-	Input             string
-	StepIndex         int
-	TestCaseReference reference `json:"TestCase"`
+	TestCaseReference reference `json:"TestCase"` // TestCase
+
+	ExpectedResult string
+	Input          string
+	StepIndex      int
 }
 
 type TestCaseStepQuery struct {
@@ -703,29 +643,21 @@ type TestCaseStepQuery struct {
 type TypeDefinition struct {
 	WorkspaceDomainObject
 
-	Abstract bool
+	AttributesQueryReference queryReference `json:"Attributes"`      // AttributeDefinitionQuery
+	ParentReference          reference      `json:"Parent"`          // TypeDefinition
+	RevisionHistoryReference reference      `json:"RevisionHistory"` // RevisionHistory
 
-	// AttributeDefinitionQuery
-	AttributesQueryReference queryReference `json:"Attributes"`
-
-	Creatable   bool
-	Deletable   bool
-	DisplayName string
-	ElementName string
-	IdPrefix    string `json:"IDPrefix"`
-	Name        string
-	Note        string
-
-	// TypeDefinition
-	ParentReference reference `json:"Parent"`
-
-	Queryable  bool
-	ReadOnly   bool
-	Restorable bool
-
-	// RevisionHistory
-	RevisionHistoryReference reference `json:"RevisionHistory"`
-
+	Abstract     bool
+	Creatable    bool
+	Deletable    bool
+	DisplayName  string
+	ElementName  string
+	IdPrefix     string `json:"IDPrefix"`
+	Name         string
+	Note         string
+	Queryable    bool
+	ReadOnly     bool
+	Restorable   bool
 	TypePath     string
 	UserListable bool
 }
@@ -739,49 +671,45 @@ type TypeDefinitionQuery struct {
 type User struct {
 	DomainObject
 
-	CostCenter               string
-	Department               string
-	Disabled                 bool
-	DisplayName              string
-	EmailAddress             string
-	FirstName                string
-	LandingPage              string
-	LastLoginDate            string
-	LastName                 string
-	LastPasswordUpdateDate   string
-	MiddleName               string
-	NetworkId                string `json:"NetworkID"`
-	OfficeLocation           string
-	OnpremLdapUsername       string
-	Phone                    string
-	Planner                  bool
-	RevisionHistoryReference reference `json:"RevisionHistory"`
-	Role                     string
-	ShortDisplayName         string
-	SubscriptionAdmin        bool
-	SubscriptionPermission   string
+	RevisionHistoryReference      reference      `json:"RevisionHistory"` // RevisionHistory
+	TeamMembershipsQueryReference queryReference `json:"TeamMemberships"` // ProjectQuery
+	UserProfileReference          reference      `json:"UserProfile"`     // UserProfile
+	UserPermissionsQueryReference queryReference `json:"UserPermissions"` // UserPermissionQuery
 
-	// ProjectQuery
-	TeamMembershipsQueryReference queryReference `json:"TeamMemberships"`
-
-	UserName string
-
-	// UserPermissionQuery
-	UserPermissionsQueryReference queryReference `json:"UserPermissions"`
-
-	UserProfileReference reference `json:"UserProfile"`
-	WorkspacePermission  string
+	CostCenter             string
+	Department             string
+	Disabled               bool
+	DisplayName            string
+	EmailAddress           string
+	FirstName              string
+	LandingPage            string
+	LastLoginDate          string
+	LastName               string
+	LastPasswordUpdateDate string
+	MiddleName             string
+	NetworkId              string `json:"NetworkID"`
+	OfficeLocation         string
+	OnpremLdapUsername     string
+	Phone                  string
+	Planner                bool
+	Role                   string
+	ShortDisplayName       string
+	SubscriptionAdmin      bool
+	SubscriptionPermission string
+	UserName               string
+	WorkspacePermission    string
 }
 
 type UserIterationCapacity struct {
 	WorkspaceDomainObject
 
-	Capacity           float64
-	IterationReference reference `json:"Iteration"`
-	Load               float64
-	ProjectReference   reference `json:"Project"`
-	TaskEstimates      float64
-	UserReference      reference `json:"User"`
+	IterationReference reference `json:"Iteration"` // Iteration
+	ProjectReference   reference `json:"Project"`   // Project
+	UserReference      reference `json:"User"`      // User
+
+	Capacity      float64
+	Load          float64
+	TaskEstimates float64
 }
 
 type UserIterationCapacityQuery struct {
@@ -793,10 +721,11 @@ type UserIterationCapacityQuery struct {
 type UserPermission struct {
 	DomainObject
 
+	UserReference reference `json:"User"` // User
+
 	CustomObjectId string `json:"CustomObjectID"`
 	Name           string
 	Role           string
-	UserReference  reference `json:"User"`
 }
 
 type UserPermissionQuery struct {
@@ -808,48 +737,34 @@ type UserPermissionQuery struct {
 type UserProfile struct {
 	DomainObject
 
+	DefaultProjectReference   reference `json:"DefaultProject"`   // Project
+	DefaultWorkspaceReference reference `json:"DefaultWorkspace"` // Workspace
+
 	DateFormat                     string
 	DateTimeFormat                 string
 	DefaultDetailPageToViewingMode bool
-
-	// Project
-	DefaultProjectReference reference `json:"DefaultProject"`
-
-	// Workspace
-	DefaultWorkspaceReference reference `json:"DefaultWorkspace"`
-
-	EmailNotificationEnabled bool
-	SessionTimeoutSeconds    int
-	SessionTimeoutWarning    bool
-	TimeZone                 string
-	WelcomePageHidden        bool
+	EmailNotificationEnabled       bool
+	SessionTimeoutSeconds          int
+	SessionTimeoutWarning          bool
+	TimeZone                       string
+	WelcomePageHidden              bool
 }
 
 type Workspace struct {
 	DomainObject
 
-	Description string
-	Name        string
-	Notes       string
+	OwnerReference                  reference      `json:"Owner"`                  // User
+	RevisionHistoryReference        reference      `json:"RevisionHistory"`        // RevisionHistory
+	ProjectsQueryReference          queryReference `json:"Projects"`               // ProjectQuery
+	TypeDefinitionsQueryReference   queryReference `json:"TypeDefinitions"`        // TypeDefinitionQuery
+	WorkspaceConfigurationReference reference      `json:"WorkspaceConfiguration"` // WorkspaceConfiguration
 
-	// User
-	OwnerReference reference `json:"Owner"`
-
-	// ProjectQuery
-	ProjectsQueryReference queryReference `json:"Projects"`
-
-	// RevisionHistory
-	RevisionHistoryReference reference `json:"RevisionHistory"`
-
+	Description   string
+	Name          string
+	Notes         string
 	SchemaVersion string
 	State         string
 	Style         string
-
-	// TypeDefinitionQuery
-	TypeDefinitionsQueryReference queryReference `json:"TypeDefinitions"`
-
-	// WorkspaceConfiguration
-	WorkspaceConfigurationReference reference `json:"WorkspaceConfiguration"`
 }
 
 type WorkspaceConfiguration struct {
@@ -870,5 +785,5 @@ type WorkspaceConfiguration struct {
 type WorkspaceDomainObject struct {
 	DomainObject
 
-	WorkspaceReference reference `json:"Workspace"`
+	WorkspaceReference reference `json:"Workspace"` // Workspace
 }
