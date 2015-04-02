@@ -12,56 +12,146 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var key = "key"
+const token = "token"
 
-func TestGetHierarchicalRequirement(t *testing.T) {
+func TestGet(t *testing.T) {
+	expected := "/hierarchicalrequirement/id"
+	response := "testdata/hierarchical-requirement.json"
 
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	s := setUpServer(t, expected, response)
 
-		var file string
+	defer s.Close()
 
-		switch r.URL.Path {
-		case "/hierarchicalrequirement/id":
-			file = "testdata/hierarchical-requirement.json"
-		case "/hierarchicalrequirement/id/workspace":
-			file = "testdata/workspace.json"
-		case "/hierarchicalrequirement/id/tasks":
-			file = "testdata/task-query.json"
-		}
-
-		assert.NotEmpty(t, file)
-		assert.Equal(t, key, r.Header["Zsessionid"][0])
-
-		d, _ := ioutil.ReadFile(file)
-		b := new(bytes.Buffer)
-
-		json.Compact(b, d)
-		fmt.Fprintln(w, b)
-	}))
-	defer ts.Close()
-
-	rally := New(key)
-	rally.api = ts.URL + "/"
+	rally := New(token)
+	rally.url = s.URL + "/"
 
 	var hr HierarchicalRequirement
-	rally.Get(&hr, "id")
+	rally.Read(&hr, "id")
 
 	assert.Equal(t, "User Story Title", hr.Name)
 	assert.Equal(t, "2015-01-01T12:00:00.000Z", hr.CreationDate)
 	assert.Equal(t, 5, hr.TasksQueryReference.Count)
+}
 
-	hr.WorkspaceReference.ReferenceUrl = ts.URL + "/" + hr.WorkspaceReference.ReferenceUrl
+func TestFetch(t *testing.T) {
+	expected := "/hierarchicalrequirement/id/workspace"
+	response := "testdata/workspace.json"
+
+	s := setUpServer(t, expected, response)
+	defer s.Close()
+
+	rally := New(token)
+
+	var hr HierarchicalRequirement
+	hr.WorkspaceReference.ReferenceUrl = s.URL + expected
 
 	var w Workspace
-	rally.Fetch(&w, hr.WorkspaceReference)
+	rally.Fetch(&w, &hr.WorkspaceReference)
 
 	assert.Equal(t, "Workspace Title", w.Name)
+}
 
-	hr.TasksQueryReference.ReferenceUrl = ts.URL + "/" + hr.TasksQueryReference.ReferenceUrl
+func TestQueryFetch(t *testing.T) {
+	expected := "/hierarchicalrequirement/id/tasks"
+	response := "testdata/task-query.json"
 
-	var tl TaskQuery
-	rally.QueryFetch(&tl, hr.TasksQueryReference)
-	assert.Equal(t, 5, tl.TotalResultCount)
-	assert.Equal(t, "Task 1", tl.Results[0].Name)
-	assert.Equal(t, "Task 5", tl.Results[4].Name)
+	s := setUpServer(t, expected, response)
+	defer s.Close()
+
+	rally := New(token)
+
+	var hr HierarchicalRequirement
+	hr.TasksQueryReference.ReferenceUrl = s.URL + expected
+
+	var tq TaskQuery
+	rally.QueryFetch(&tq, &hr.TasksQueryReference)
+
+	assert.Equal(t, 5, tq.TotalResultCount)
+	assert.Equal(t, "Task 1", tq.Results[0].Name)
+	assert.Equal(t, "Task 5", tq.Results[4].Name)
+}
+
+func TestFailCreatingNewRequest(t *testing.T) {
+
+	rally := New(token)
+	rally.url = ":"
+
+	var a Artifact
+	err := rally.Read(&a, "")
+	assert.NotEmpty(t, err)
+}
+
+func TestFailClientDoRequest(t *testing.T) {
+
+	rally := New(token)
+	rally.url = ""
+
+	var a Artifact
+	var r reference
+
+	err := rally.Fetch(&a, &r)
+	assert.NotEmpty(t, err)
+}
+
+func TestFailStatusCodeNotOK(t *testing.T) {
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.NotFound(w, r)
+	})
+
+	s := httptest.NewServer(handler)
+	defer s.Close()
+
+	rally := New(token)
+
+	var a Artifact
+	var q queryReference
+	q.ReferenceUrl = s.URL
+
+	err := rally.QueryFetch(&a, &q)
+	assert.NotEmpty(t, err)
+}
+
+func TestFailJsonUnmarshalResponse(t *testing.T) {
+
+	s := setUpServer(t, "/artifact/id", "")
+	defer s.Close()
+
+	rally := New(token)
+	rally.url = s.URL + "/"
+
+	var a Artifact
+
+	err := rally.Read(&a, "id")
+	assert.NotEmpty(t, err)
+}
+
+func TestFailJsonUnmarshalOntoStruct(t *testing.T) {
+
+	s := setUpServer(t, "/artifact/id", "testdata/fail-artifact.json")
+	defer s.Close()
+
+	rally := New(token)
+	rally.url = s.URL + "/"
+
+	var a Artifact
+
+	err := rally.Read(&a, "id")
+	assert.NotEmpty(t, err)
+}
+
+func setUpServer(t *testing.T, uri string, file string) *httptest.Server {
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, uri, r.URL.Path)
+		assert.Equal(t, token, r.Header["Zsessionid"][0])
+
+		data, _ := ioutil.ReadFile(file)
+		buffer := new(bytes.Buffer)
+
+		json.Compact(buffer, data)
+		fmt.Fprintln(w, buffer)
+	})
+
+	return httptest.NewServer(handler)
 }
