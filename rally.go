@@ -28,7 +28,7 @@ func New(token string) *rally {
 }
 
 // Get a populated instance of the supplied object given the id
-func (r *rally) Read(object interface{}, id string) error {
+func (r *rally) Get(object interface{}, id string) error {
 	kind := getStructType(object)
 
 	parts := []string{strings.ToLower(kind), "/", id}

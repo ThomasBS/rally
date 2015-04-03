@@ -28,7 +28,7 @@ func TestGet(t *testing.T) {
 	rally.url = s.URL + "/"
 
 	var hr HierarchicalRequirement
-	rally.Read(&hr, "id")
+	rally.Get(&hr, "id")
 
 	assert.Equal(t, "User Story Title", hr.Name)
 	assert.Equal(t, "2015-01-01T12:00:00.000Z", hr.CreationDate)
@@ -79,7 +79,7 @@ func TestFailCreatingNewRequest(t *testing.T) {
 	rally.url = ":"
 
 	var a Artifact
-	err := rally.Read(&a, "")
+	err := rally.Get(&a, "")
 	assert.NotEmpty(t, err)
 }
 
@@ -124,7 +124,7 @@ func TestFailJsonUnmarshalResponse(t *testing.T) {
 
 	var a Artifact
 
-	err := rally.Read(&a, "id")
+	err := rally.Get(&a, "id")
 	assert.NotEmpty(t, err)
 }
 
@@ -141,7 +141,7 @@ func TestFailRallyErrorResponse(t *testing.T) {
 	var buf bytes.Buffer
 	log.SetOutput(&buf)
 
-	err := rally.Read(&a, "id")
+	err := rally.Get(&a, "id")
 
 	log.SetOutput(os.Stderr)
 
@@ -162,7 +162,7 @@ func TestFailJsonUnmarshalOntoStruct(t *testing.T) {
 
 	var a Artifact
 
-	err := rally.Read(&a, "id")
+	err := rally.Get(&a, "id")
 	assert.NotEmpty(t, err)
 }
 
@@ -179,7 +179,7 @@ func TestFailRallyResponseHasErrorsAndWarnings(t *testing.T) {
 	var buf bytes.Buffer
 	log.SetOutput(&buf)
 
-	err := rally.Read(&a, "id")
+	err := rally.Get(&a, "id")
 
 	log.SetOutput(os.Stderr)
 
