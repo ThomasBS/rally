@@ -109,8 +109,6 @@ func (r *rally) call(method string, url string) (body []byte, err error) {
 
 	body, err = ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("ioutil.ReadAll Error")
-		fmt.Println(err)
 		return nil, err
 	}
 
