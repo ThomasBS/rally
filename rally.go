@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -126,14 +127,49 @@ func getStructType(object interface{}) string {
 
 // Unmarshal the body onto the supplied object
 func unmarshal(object interface{}, body []byte, key string) (err error) {
-	var j map[string]*json.RawMessage
+	var data map[string]*json.RawMessage
 
-	if err = json.Unmarshal(body, &j); err != nil {
+	if err = json.Unmarshal(body, &data); err != nil {
 		return err
 	}
 
-	if err = json.Unmarshal(*j[key], &object); err != nil {
+	errorResponseKey := "OperationResult"
+	if _, isset := data[errorResponseKey]; isset {
+		if err = checkResponse(data, errorResponseKey); err != nil {
+			return err
+		}
+	}
+
+	if err = json.Unmarshal(*data[key], &object); err != nil {
 		return err
+	}
+
+	if err = checkResponse(data, key); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Check the response for any errors or warnings. Warnings will be logged
+// and errors will be returned
+func checkResponse(data map[string]*json.RawMessage, key string) error {
+	type result struct {
+		Errors   []string
+		Warnings []string
+	}
+
+	var r result
+	json.Unmarshal(*data[key], &r)
+
+	if len(r.Warnings) > 0 {
+		message := strings.Join(r.Warnings, "\"; \"")
+		log.Println("rally api warnings: \"" + message + "\"")
+	}
+
+	if len(r.Errors) > 0 {
+		message := strings.Join(r.Errors, "\"; \"")
+		return errors.New("rally api errors: \"" + message + "\"")
 	}
 
 	return nil

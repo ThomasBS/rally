@@ -1,0 +1,12 @@
+{
+    "OperationResult": {
+        "Errors": [
+            "Error 1",
+            "Error 2"
+        ],
+        "Warnings": [
+            "Warning 1",
+            "Warning 2"
+        ]
+    }
+}

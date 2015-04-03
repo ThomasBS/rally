@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -126,6 +128,30 @@ func TestFailJsonUnmarshalResponse(t *testing.T) {
 	assert.NotEmpty(t, err)
 }
 
+func TestFailRallyErrorResponse(t *testing.T) {
+
+	s := setUpServer(t, "/artifact/id", "testdata/error-response.json")
+	defer s.Close()
+
+	rally := New(token)
+	rally.url = s.URL + "/"
+
+	var a Artifact
+
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+
+	err := rally.Read(&a, "id")
+
+	log.SetOutput(os.Stderr)
+
+	assert.NotContains(t, "Error 1", err)
+	assert.NotContains(t, "Error 2", err)
+
+	assert.NotContains(t, "Warning 1", buf.String())
+	assert.NotContains(t, "Warning 2", buf.String())
+}
+
 func TestFailJsonUnmarshalOntoStruct(t *testing.T) {
 
 	s := setUpServer(t, "/artifact/id", "testdata/fail-artifact.json")
@@ -138,6 +164,30 @@ func TestFailJsonUnmarshalOntoStruct(t *testing.T) {
 
 	err := rally.Read(&a, "id")
 	assert.NotEmpty(t, err)
+}
+
+func TestFailRallyResponseHasErrorsAndWarnings(t *testing.T) {
+
+	s := setUpServer(t, "/artifact/id", "testdata/artifact-with-errors.json")
+	defer s.Close()
+
+	rally := New(token)
+	rally.url = s.URL + "/"
+
+	var a Artifact
+
+	var buf bytes.Buffer
+	log.SetOutput(&buf)
+
+	err := rally.Read(&a, "id")
+
+	log.SetOutput(os.Stderr)
+
+	assert.NotContains(t, "Error 1", err)
+	assert.NotContains(t, "Error 2", err)
+
+	assert.NotContains(t, "Warning 1", buf.String())
+	assert.NotContains(t, "Warning 2", buf.String())
 }
 
 func setUpServer(t *testing.T, uri string, file string) *httptest.Server {
