@@ -44,19 +44,31 @@ func (r *rally) Get(object interface{}, id string) error {
 
 // Fetch a populated instance of the supplied object given the reference
 // supplied
-func (r *rally) Fetch(object interface{}, ref *reference) error {
+func (r *rally) Fetch(object interface{}, ref reference) error {
+	kind := getStructType(object)
+
+	if len(ref.ReferenceUrl) == 0 {
+		message := fmt.Sprintf("null reference for: %s", kind)
+		return errors.New(message)
+	}
+
 	body, err := r.get(ref.ReferenceUrl)
 	if err != nil {
 		return err
 	}
 
-	kind := getStructType(object)
 	return unmarshal(object, body, kind)
 }
 
 // Fetch a populated query instance of the supplied query object given the
 // query reference supplied
-func (r *rally) QueryFetch(object interface{}, ref *queryReference) error {
+func (r *rally) QueryFetch(object interface{}, ref queryReference) error {
+	if len(ref.ReferenceUrl) == 0 {
+		kind := getStructType(object)
+		message := fmt.Sprintf("null query reference for: %s", kind)
+		return errors.New(message)
+	}
+
 	body, err := r.get(ref.ReferenceUrl)
 	if err != nil {
 		return err

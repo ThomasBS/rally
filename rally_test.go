@@ -48,7 +48,7 @@ func TestFetch(t *testing.T) {
 	hr.WorkspaceReference.ReferenceUrl = s.URL + expected
 
 	var w Workspace
-	rally.Fetch(&w, &hr.WorkspaceReference)
+	rally.Fetch(&w, hr.WorkspaceReference)
 
 	assert.Equal(t, "Workspace Title", w.Name)
 }
@@ -66,11 +66,33 @@ func TestQueryFetch(t *testing.T) {
 	hr.TasksQueryReference.ReferenceUrl = s.URL + expected
 
 	var tq TaskQuery
-	rally.QueryFetch(&tq, &hr.TasksQueryReference)
+	rally.QueryFetch(&tq, hr.TasksQueryReference)
 
 	assert.Equal(t, 5, tq.TotalResultCount)
 	assert.Equal(t, "Task 1", tq.Results[0].Name)
 	assert.Equal(t, "Task 5", tq.Results[4].Name)
+}
+
+func TestFailFetchReferenceUrlEmpty(t *testing.T) {
+
+	rally := New(token)
+
+	var a Artifact
+	var r reference
+
+	err := rally.Fetch(&a, r)
+	assert.NotEmpty(t, err)
+}
+
+func TestFailQueryFetchReferenceUrlEmpty(t *testing.T) {
+
+	rally := New(token)
+
+	var a Artifact
+	var q queryReference
+
+	err := rally.QueryFetch(&a, q)
+	assert.NotEmpty(t, err)
 }
 
 func TestFailCreatingNewRequest(t *testing.T) {
@@ -90,8 +112,9 @@ func TestFailClientDoRequest(t *testing.T) {
 
 	var a Artifact
 	var r reference
+	r.ReferenceUrl = "reference_url"
 
-	err := rally.Fetch(&a, &r)
+	err := rally.Fetch(&a, r)
 	assert.NotEmpty(t, err)
 }
 
@@ -110,7 +133,7 @@ func TestFailStatusCodeNotOK(t *testing.T) {
 	var q queryReference
 	q.ReferenceUrl = s.URL
 
-	err := rally.QueryFetch(&a, &q)
+	err := rally.QueryFetch(&a, q)
 	assert.NotEmpty(t, err)
 }
 
