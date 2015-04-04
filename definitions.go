@@ -399,7 +399,7 @@ type MilestoneQuery struct {
 
 type PersistableObject struct {
 	CreationDate string
-	ObjectId     string `json:"ObjectID"`
+	ObjectId     int64 `json:"ObjectID"`
 	VersionId    string
 }
 
