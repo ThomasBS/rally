@@ -92,11 +92,6 @@ func (r *rally) get(url string) ([]byte, error) {
 	return r.call("GET", url)
 }
 
-// TODO put
-// TODO post
-// TODO delete
-// TODO get with query
-
 // Call the supplied url using the HTTP method
 func (r *rally) call(method string, url string) (body []byte, err error) {
 	request, err := http.NewRequest(method, url, nil)
