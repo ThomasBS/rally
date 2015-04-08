@@ -137,6 +137,20 @@ func TestFailStatusCodeNotOK(t *testing.T) {
 	assert.NotEmpty(t, err)
 }
 
+func TestFailReadResponseBody(t *testing.T) {
+	s := setUpBadServer()
+
+	defer s.Close()
+
+	rally := New(token)
+	rally.url = s.URL + "/"
+
+	var hr HierarchicalRequirement
+	err := rally.Get(&hr, "id")
+
+	assert.NotEqual(t, nil, err)
+}
+
 func TestFailJsonUnmarshalResponse(t *testing.T) {
 
 	s := setUpServer(t, "/artifact/id", "")
@@ -224,6 +238,16 @@ func setUpServer(t *testing.T, uri string, file string) *httptest.Server {
 
 		json.Compact(buffer, data)
 		fmt.Fprintln(w, buffer)
+	})
+
+	return httptest.NewServer(handler)
+}
+
+func setUpBadServer() *httptest.Server {
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Length", "2")
+		fmt.Fprintln(w, "")
 	})
 
 	return httptest.NewServer(handler)
