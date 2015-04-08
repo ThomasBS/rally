@@ -36,7 +36,7 @@ Getting a Rally object:
     var hr rally.HierarchicalRequirement
     r.Get(&hr, "hierarchical_requirement_id")
 
-All methods returns an ``Error`` on failure or ``nil`` on success.
+All methods returns an ``error`` on failure or ``nil`` on success.
 
 The objects are not fully populated with data, but contain references and query references that can be called if the relations of the object is required. A reference denotes a one-to-one relation, whereas a query reference denotes as one-to-many relation. Examples of the usage of references:
 
