@@ -1,11 +1,11 @@
 package rally
 
 type reference struct {
-	ReferenceUrl string `json:"_ref"`
+	ReferenceURL string `json:"_ref"`
 }
 
 type queryReference struct {
-	ReferenceUrl string `json:"_ref"`
+	ReferenceURL string `json:"_ref"`
 	Count        int
 }
 
@@ -56,7 +56,7 @@ type Artifact struct {
 	Description                  string
 	DisplayColor                 string
 	Expedite                     bool
-	FormattedId                  string `json:"FormattedID"`
+	FormattedID                  string `json:"FormattedID"`
 	LastUpdateDate               string
 	LatestDiscussionAgeInMinutes int
 	Name                         string
@@ -148,7 +148,7 @@ type Build struct {
 	Number   string
 	Start    string
 	Status   string
-	Uri      string
+	URI      string
 }
 
 type BuildQuery struct {
@@ -168,7 +168,7 @@ type BuildDefinition struct {
 	Description string
 	LastStatus  string
 	Name        string
-	Uri         string
+	URI         string
 }
 
 type Change struct {
@@ -180,7 +180,7 @@ type Change struct {
 	Base            string
 	Extension       string
 	PathAndFilename string
-	Uri             string
+	URI             string
 }
 
 type ChangeQuery struct {
@@ -202,7 +202,7 @@ type Changeset struct {
 	Message         string
 	Name            string
 	Revision        string
-	Uri             string
+	URI             string
 }
 
 type ChangesetQuery struct {
@@ -260,7 +260,7 @@ type Defect struct {
 	Recycled             bool
 	ReleaseNote          bool
 	Resolution           string
-	SalesforceCaseId     string `json:"SalesforceCaseID"`
+	SalesforceCaseID     string `json:"SalesforceCaseID"`
 	SalesforceCaseNumber string
 	Severity             string
 	State                string
@@ -384,7 +384,7 @@ type Milestone struct {
 	TargetProjectReference   reference      `json:"TargetProject"`   // Project
 
 	DisplayColor       string
-	FormattedId        string `json:"FormattedID"`
+	FormattedID        string `json:"FormattedID"`
 	Name               string
 	Notes              string
 	TargetDate         string
@@ -399,8 +399,8 @@ type MilestoneQuery struct {
 
 type PersistableObject struct {
 	CreationDate string
-	ObjectId     int64 `json:"ObjectID"`
-	VersionId    string
+	ObjectID     int64 `json:"ObjectID"`
+	VersionID    string
 }
 
 type Project struct {
@@ -488,7 +488,7 @@ type SCMRepository struct {
 	Description string
 	Name        string
 	SCMType     string
-	Uri         string
+	URI         string
 }
 
 type SchedulableArtifact struct {
@@ -527,7 +527,7 @@ type Subscription struct {
 	SessionTimeoutSeconds   int
 	StoryHierarchyEnabled   bool
 	StoryHierarchyType      string
-	SubscriptionId          int `json:"SubscriptionID"`
+	SubscriptionID          int `json:"SubscriptionID"`
 	SubscriptionType        string
 }
 
@@ -652,7 +652,7 @@ type TypeDefinition struct {
 	Deletable    bool
 	DisplayName  string
 	ElementName  string
-	IdPrefix     string `json:"IDPrefix"`
+	IDPrefix     string `json:"IDPrefix"`
 	Name         string
 	Note         string
 	Queryable    bool
@@ -687,7 +687,7 @@ type User struct {
 	LastName               string
 	LastPasswordUpdateDate string
 	MiddleName             string
-	NetworkId              string `json:"NetworkID"`
+	NetworkID              string `json:"NetworkID"`
 	OfficeLocation         string
 	OnpremLdapUsername     string
 	Phone                  string
@@ -723,7 +723,7 @@ type UserPermission struct {
 
 	UserReference reference `json:"User"` // User
 
-	CustomObjectId string `json:"CustomObjectID"`
+	CustomObjectID string `json:"CustomObjectID"`
 	Name           string
 	Role           string
 }
