@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const apiUrl = "https://rally1.rallydev.com/slm/webservice/v2.0/"
+const apiURL = "https://rally1.rallydev.com/slm/webservice/v2.0/"
 const apiSessionKey = "ZSESSIONID"
 
 type rally struct {
@@ -24,7 +24,7 @@ type rally struct {
 //
 // Basic auth with username and password is not supported at the moment
 func New(token string) *rally {
-	return &rally{url: apiUrl, token: token}
+	return &rally{url: apiURL, token: token}
 }
 
 // Get a populated instance of the supplied object given the id
@@ -32,7 +32,7 @@ func (r *rally) Get(object interface{}, id string) error {
 	kind := getStructType(object)
 
 	parts := []string{strings.ToLower(kind), "/", id}
-	url := r.generateUrl(strings.Join(parts, ""))
+	url := r.generateURL(strings.Join(parts, ""))
 
 	body, err := r.get(url)
 	if err != nil {
@@ -47,12 +47,12 @@ func (r *rally) Get(object interface{}, id string) error {
 func (r *rally) Fetch(object interface{}, ref reference) error {
 	kind := getStructType(object)
 
-	if len(ref.ReferenceUrl) == 0 {
+	if len(ref.ReferenceURL) == 0 {
 		message := fmt.Sprintf("null reference for: %s", kind)
 		return errors.New(message)
 	}
 
-	body, err := r.get(ref.ReferenceUrl)
+	body, err := r.get(ref.ReferenceURL)
 	if err != nil {
 		return err
 	}
@@ -63,13 +63,13 @@ func (r *rally) Fetch(object interface{}, ref reference) error {
 // Fetch a populated query instance of the supplied query object given the
 // query reference supplied
 func (r *rally) QueryFetch(object interface{}, ref queryReference) error {
-	if len(ref.ReferenceUrl) == 0 {
+	if len(ref.ReferenceURL) == 0 {
 		kind := getStructType(object)
 		message := fmt.Sprintf("null query reference for: %s", kind)
 		return errors.New(message)
 	}
 
-	body, err := r.get(ref.ReferenceUrl)
+	body, err := r.get(ref.ReferenceURL)
 	if err != nil {
 		return err
 	}
@@ -78,7 +78,7 @@ func (r *rally) QueryFetch(object interface{}, ref queryReference) error {
 }
 
 // Concatinates the api url with the supplied uri
-func (r *rally) generateUrl(uri string) string {
+func (r *rally) generateURL(uri string) string {
 	var buffer bytes.Buffer
 
 	buffer.WriteString(r.url)
