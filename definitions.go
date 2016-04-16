@@ -56,7 +56,7 @@ type Artifact struct {
 	Description                  string
 	DisplayColor                 string
 	Expedite                     bool
-	FormattedID                  string `json:"FormattedID"`
+	FormattedID                  string
 	LastUpdateDate               string
 	LatestDiscussionAgeInMinutes int
 	Name                         string
@@ -260,7 +260,7 @@ type Defect struct {
 	Recycled             bool
 	ReleaseNote          bool
 	Resolution           string
-	SalesforceCaseID     string `json:"SalesforceCaseID"`
+	SalesforceCaseID     string
 	SalesforceCaseNumber string
 	Severity             string
 	State                string
@@ -384,7 +384,7 @@ type Milestone struct {
 	TargetProjectReference   reference      `json:"TargetProject"`   // Project
 
 	DisplayColor       string
-	FormattedID        string `json:"FormattedID"`
+	FormattedID        string
 	Name               string
 	Notes              string
 	TargetDate         string
@@ -399,7 +399,7 @@ type MilestoneQuery struct {
 
 type PersistableObject struct {
 	CreationDate string
-	ObjectID     int64 `json:"ObjectID"`
+	ObjectID     int64
 	VersionID    string
 }
 
@@ -527,7 +527,7 @@ type Subscription struct {
 	SessionTimeoutSeconds   int
 	StoryHierarchyEnabled   bool
 	StoryHierarchyType      string
-	SubscriptionID          int `json:"SubscriptionID"`
+	SubscriptionID          int
 	SubscriptionType        string
 }
 
@@ -652,7 +652,7 @@ type TypeDefinition struct {
 	Deletable    bool
 	DisplayName  string
 	ElementName  string
-	IDPrefix     string `json:"IDPrefix"`
+	IDPrefix     string
 	Name         string
 	Note         string
 	Queryable    bool
@@ -687,7 +687,7 @@ type User struct {
 	LastName               string
 	LastPasswordUpdateDate string
 	MiddleName             string
-	NetworkID              string `json:"NetworkID"`
+	NetworkID              string
 	OfficeLocation         string
 	OnpremLdapUsername     string
 	Phone                  string
@@ -723,7 +723,7 @@ type UserPermission struct {
 
 	UserReference reference `json:"User"` // User
 
-	CustomObjectID string `json:"CustomObjectID"`
+	CustomObjectID string
 	Name           string
 	Role           string
 }
