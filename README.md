@@ -1,9 +1,8 @@
-Rally API
+Rally
 =========
 
-Rally API is a [Go](http://golang.org/) wrapper for the agile project management [Rally](http://rally1.rallydev.com).
-
-**Warning:** Rally API is under active development!
+Rally is a [Go](http://golang.org/) wrapper for the agile project management [Rally](http://rally1.rallydev.com).
+The documentation for the API is available [here](https://rally1.rallydev.com/slm/doc/webservice/).
 
 Features
 --------
@@ -22,9 +21,9 @@ This wrapper does not support basic auth.
 Installation
 ------------
 
-Install Rally API using the ``go get`` command:
+Install Rally using the ``go get`` command:
 
-    go get github.com/ofmadsen/rally
+    go get github.com/thomasbs/rally
 
 Usage
 -----
@@ -32,7 +31,7 @@ Usage
 Getting a Rally object:
 
     r := rally.New("rally_obtained_token")
-    
+
     var hr rally.HierarchicalRequirement
     r.Get(&hr, "hierarchical_requirement_id")
 
@@ -60,4 +59,4 @@ This project is still under active development and any new features might alread
 License
 -------
 
-Rally API is available under the [MIT License](http://opensource.org/licenses/MIT).
+Rally is available under the [MIT License](http://opensource.org/licenses/MIT).
