@@ -700,6 +700,12 @@ type User struct {
 	WorkspacePermission    string
 }
 
+type UserQuery struct {
+	queryResult
+
+	Results []User
+}
+
 type UserIterationCapacity struct {
 	WorkspaceDomainObject
 
